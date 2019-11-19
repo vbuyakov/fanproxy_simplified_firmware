@@ -19,7 +19,5 @@ void setup() {
 }
 
 void loop() {
-  #if _USE_WIFI_SRV_
   iotHandleCLient();
-  #endif
 }
