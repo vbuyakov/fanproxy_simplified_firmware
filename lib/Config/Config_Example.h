@@ -11,7 +11,7 @@
 //Fan Motor
 const int fanMotorPin = 1;
 // Shutter servo
-const int shutterServoPin = 16;
+const int shuttersPins[] = {16, 15, 11};
 // Temperature sensor pin
 const int temperaturePin = D2;
 
