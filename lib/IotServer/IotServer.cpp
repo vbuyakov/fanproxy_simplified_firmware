@@ -13,6 +13,11 @@
 #include <Temperature.h>
 
 ESP8266WebServer server(80); // Iot web server
+Shutters shutters;
+
+void initIotHardware() {
+    shutters.init(shuttersPins);
+}
 
 void handleRoot()
 { // empty request, for debug
@@ -76,19 +81,27 @@ void handleShutter()
     {
         const String angleParam = server.arg("angle");
         const int angle = angleParam.toInt();
-        if (angle == 0 && angleParam != "0")
-        {
-            server.send(400, "text/plain", "Wrong value of angle, should be a number");
+
+        const int shutterNumb = server.arg("shutter").toInt();
+
+        String errorMsg = "";
+        if (angle == 0 && angleParam != "0") {
+            errorMsg += "Wrong value of angle, should be a number\n";
         }
-        else if (angle < 0 || angle > 90)
-        {
-            server.send(400, "text/plain", "Wrong value of angle, should be more than 0 and less then 90");
+        if(shutterNumb == 0) {
+            errorMsg += "Wrong value of shuter, should be a number starting from 1\n";
         }
-        else
-        {
-            setShutterPosition(angle);
-            server.send(200, "text/plain", "success");
+
+        if(errorMsg.length() == 0) {
+            int res = shutters.setPostionOf(shutterNumb, angle);
+            if(res == 0) {
+                server.send(200, "text/plain", "success");
+                return;
+            } else {
+                errorMsg += shutters.getLastError();
+            }
         }
+        server.send(400, "text/plain", errorMsg);
     }
 }
 
@@ -99,13 +112,13 @@ void iotHandleCLient()
 
 void initIotServer()
 { //Init server
+    WiFi.mode(WIFI_STA);
     IPAddress ip;
     ip.fromString(srvIp);
     IPAddress gateway;
     gateway.fromString(srvGateway);
     IPAddress subnet;
     subnet.fromString(srvSubnet);
-
     WiFi.config(ip, gateway, subnet);
     WiFi.hostname(iotServerName);
     WiFi.begin(ssid.c_str(), password.c_str());
@@ -125,6 +138,8 @@ void initIotServer()
     Serial.println("Connected with IP address: ");
     Serial.println(WiFi.localIP());
 #endif
+    // Init hardware
+    initIotHardware();
 
     // Set up routes
     server.on("/", handleRoot);

@@ -3,18 +3,19 @@
 
 void initFanMotor() {
     pinMode(fanMotorPin, OUTPUT);
+    digitalWrite(fanMotorPin, HIGH);
 }
 
 void turnOnFanMotor() {
-    digitalWrite(fanMotorPin, HIGH);
+    digitalWrite(fanMotorPin, LOW);
     #if _DBG_
-        Serial.println("ON / HIGH");
+        Serial.println("ON / LOW");
     #endif
 }
 
 void turnOffFanMotor() {
-    digitalWrite(fanMotorPin, LOW);
+    digitalWrite(fanMotorPin, HIGH);
     #if _DBG_
-        Serial.println("OFF / LOW");
+        Serial.println("OFF / HIGH");
     #endif
 }

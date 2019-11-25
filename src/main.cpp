@@ -8,20 +8,16 @@
 
 void setup() {
   initFanMotor();
-  initShutter();
   initTemperatureSensor();
   #if _DBG_
     Serial.begin(9600);
     Serial.print("Ready for Debug");
   #endif
-  #if _USE_WIFI_SRV_
-    initIotServer();
-  #endif
+  
+  initIotServer();
 
 }
 
 void loop() {
-  #if _USE_WIFI_SRV_
   iotHandleCLient();
-  #endif
 }
