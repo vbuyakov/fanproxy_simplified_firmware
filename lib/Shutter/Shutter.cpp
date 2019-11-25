@@ -53,7 +53,7 @@ String Shutter::getLastError() {
             _operationError = "Wrong value of shutter number. Total installed:" + String(_shuttersLen);
             return -11;
         }
-        if(shuttersPins == 0)
+        if(shutterNumb == 0)
         {
             _operationError = "Wrong value of shutter number. Should be start from 1. Total installed:" + String(_shuttersLen);
             return -11;
