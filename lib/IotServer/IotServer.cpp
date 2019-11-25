@@ -112,13 +112,13 @@ void iotHandleCLient()
 
 void initIotServer()
 { //Init server
+    WiFi.mode(WIFI_STA);
     IPAddress ip;
     ip.fromString(srvIp);
     IPAddress gateway;
     gateway.fromString(srvGateway);
     IPAddress subnet;
     subnet.fromString(srvSubnet);
-
     WiFi.config(ip, gateway, subnet);
     WiFi.hostname(iotServerName);
     WiFi.begin(ssid.c_str(), password.c_str());

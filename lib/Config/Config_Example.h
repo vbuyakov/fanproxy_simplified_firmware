@@ -9,9 +9,9 @@
 #include <Arduino.h>
 
 //Fan Motor
-const int fanMotorPin = 1;
-// Shutter servo
-const int shuttersPins[] = {16, 15, 11};
+const int fanMotorPin = D5; // D6
+// Shutter servo.
+const int shuttersPins[] = {D0, D1};
 // Temperature sensor pin
 const int temperaturePin = D2;
 
@@ -23,5 +23,11 @@ const String  iotServerName = "IOT_Air_System";          // Host name of this De
 const String  srvIp = "192.168.xx.xx"; // where xx is the desired IP Address
 const String  srvGateway = "192.168.0.1"; // set gateway to match your network
 const String  srvSubnet ="255.255.255.0"; // set subnet mask to match your network
-
+/**
+ * For Servo i use FTP cable where:
+ * orane, orange-white  - 5V
+ * brown, brown-white,  green-white - GND
+ * green - Signal
+ * blue, blue-white - NC
+ * */
 #endif
