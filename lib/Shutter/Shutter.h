@@ -30,7 +30,7 @@ class Shutters
 {
     public: 
     Shutters();
-    void init(const int shuttersPins[]);
+    void init(const std::vector <uint8_t> shuttersPins);
     int setPostionOf(uint8_t shutterNumb, int pos);
     String getLastError();
     private:

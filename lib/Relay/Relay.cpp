@@ -57,15 +57,15 @@ Relays::Relays()
     _relaysLen = 0;
 }
 
-void Relays::init(const int relaysPins[])
+void Relays::init(const std::vector <uint8_t> relaysPins)
 {
-    _relaysLen = sizeof(relaysPins) / sizeof(relaysPins[0]);
+    _relaysLen = relaysPins.size();
     for (uint8_t i = 0; i < _relaysLen; i++)
     {
         Relay relay;
         relay.attach(relaysPins[i]);
         _relays.push_back(relay);
-    }
+    };
 }
 
 uint8_t Relays::setStateOf(uint8_t relayNumb, uint8_t state)
@@ -118,4 +118,8 @@ boolean Relays::_validateRelayNumber(int8_t relayNumb) {
         return false;
     }
     return true;
+}
+
+uint8_t Relays::getRelaysCount() {
+    return _relaysLen;
 }

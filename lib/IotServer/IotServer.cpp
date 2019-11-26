@@ -8,15 +8,17 @@
 #include <ESP8266mDNS.h>
 
 #include <Config.h>
-#include <FanMotor.h>
 #include <Shutter.h>
+#include <Relay.h>
 #include <Temperature.h>
 
 ESP8266WebServer server(80); // Iot web server
 Shutters shutters;
+Relays relays;
 
 void initIotHardware() {
     shutters.init(shuttersPins);
+    relays.init(relaysPins);
 }
 
 void handleRoot()
@@ -57,12 +59,32 @@ void handleTemperature()
     }
 }
 
+
+void handleRelayRequest(uint8_t state) 
+{
+    uint8_t relayNumb = server.arg("relay").toInt();
+    String errorMsg = "";
+    if(relayNumb == 0) {
+        relayNumb = 1;
+    }
+
+    if(errorMsg.length() == 0) {
+        uint8_t res = relays.setStateOf(relayNumb, state);
+        if(res == 0) {
+            server.send(200, "text/plain", "success");
+            return;
+        } else {
+            errorMsg += relays.getLastError();
+        }
+    }
+    server.send(400, "text/plain", errorMsg);
+}
+
 void handleOn()
 { // Switch ON fan motor
     if (checkAccess())
     {
-        turnOnFanMotor();
-        server.send(200, "text/plain", "success");
+        handleRelayRequest(1);
     }
 }
 
@@ -70,8 +92,7 @@ void handleOff()
 { // Switch off fan motor
     if (checkAccess())
     {
-        turnOffFanMotor();
-        server.send(200, "text/plain", "success");
+        handleRelayRequest(0);
     }
 }
 
@@ -143,9 +164,16 @@ void initIotServer()
 
     // Set up routes
     server.on("/", handleRoot);
+    /**
+     * relay - number of relay, if not set number=1
+     **/
     server.on("/on", HTTP_GET, handleOn);
     server.on("/off", HTTP_GET, handleOff);
-    server.on("/shutter", HTTP_GET, handleShutter); // Params angle - 0 -closed, 80 -opened
+    /**
+     * angle - 0 -closed, 80 -opened
+     * shutter - number of shutter
+     **/
+    server.on("/shutter", HTTP_GET, handleShutter);
     server.on("/temperature", HTTP_GET, handleTemperature);
     server.onNotFound(handleNotFound);
     //Start server

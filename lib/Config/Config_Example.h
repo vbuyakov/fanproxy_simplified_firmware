@@ -7,11 +7,21 @@
 
 #include <WString.h>
 #include <Arduino.h>
+#include <vector>
 
-//Fan Motor
-const int fanMotorPin = D5; // D6
-// Shutter servo.
-const int shuttersPins[] = {D0, D1};
+//Relays
+const std::vector<uint8_t> relaysPins = {
+    D5, // Fan Motor
+    D6, // Lamp
+};
+
+// Shutter servo
+const std::vector<uint8_t> shuttersPins = {
+    D0, 
+    D1,
+    D3,
+};
+
 // Temperature sensor pin
 const int temperaturePin = D2;
 

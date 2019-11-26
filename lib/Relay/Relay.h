@@ -25,9 +25,10 @@ class Relay {
 class Relays {
     public: 
         Relays();
-        void init(const int relaysPins[]);
+        void init(const std::vector <uint8_t> relaysPins);
         uint8_t setStateOf(uint8_t relayNumb, uint8_t state);
         uint8_t getStateOf(uint8_t relayNumb);
+        uint8_t getRelaysCount();
         String getLastError();
     private:
         String _operationError;

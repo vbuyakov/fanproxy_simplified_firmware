@@ -40,8 +40,8 @@ String Shutter::getLastError() {
         _shuttersLen = 0;
     }
 
-    void Shutters::init(const int shuttersPins[]) {
-        _shuttersLen = sizeof(shuttersPins) / sizeof(shuttersPins[0]);
+    void Shutters::init(const std::vector <uint8_t> shuttersPins) {
+        _shuttersLen = shuttersPins.size();
         for(uint8_t i = 0 ; i < _shuttersLen ; i++ ) {
             Shutter shutter;
             shutter.attach(shuttersPins[i]);
